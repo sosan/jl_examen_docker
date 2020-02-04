@@ -1,9 +1,0 @@
-.git
-.go-pkg-cache
-.gopath
-**/.git
-**/.DS_Store
-**/node_modules
-bundles
-Dockerfile
-vendor/pkg

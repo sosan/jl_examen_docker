@@ -28,7 +28,7 @@ RUN useradd --create-home usuarioapp
 WORKDIR /home/usuarioapp
 
 # creamos el arbol de directorios
-#COPY /src /home/usuarioapp/src
+# COPY /src /home/usuarioapp/src
 
 # copiamos todo dentro de usuarioapp
 # estamos copiando los dockerfile y docker-compose, etc..
