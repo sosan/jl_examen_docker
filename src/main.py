@@ -24,10 +24,16 @@ def home():
     return render_template("index.html")
 
 
+
 @app.route("/", methods=["post"])
-def recibir_datos_home():
+def recibir_login():
     
-    if "" in request.form:
+    if "usuario" and "password" in request.form:
+        
+        ok = managerlogica.comprobarusuario(request.form["usuario"], request.formp["password"])
+        
+        
+        
         return redirect(url_for(""))    
     return redirect(url_for("home"))
 
