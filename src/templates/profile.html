@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{#{% if calculo_gasto_electricidad_mes %}#}
+{##}
+{#    GASTOS DURANTE EL MES DE {{ mes }}<br>#}
+{#    CALCULO ELECTRICIDAD: {{ calculo_gasto_electricidad_mes }} euros<br>#}
+{#    CALCULO GASOLINA: {{ calculo_gasto_gasolina_mes }} euros<>#}
+{#    CALCULO SEGURO: {{calculo_gasto_seguro_mes}} euros<br>#}
+{##}
+{##}
+{#{% endif %}#}
+
+
+<H3>GASTOS GENERALES EN UN COCHE:</H3>
+<div class="container-fluid">
+<form action="{{ url_for("recibir_datos_gastos") }}" method="POST">
+    {% if hoy.strftime("%m") == "01"  %}
+        <input type="hidden" name="mes" value="enero">
+    {% elif hoy.strftime("%m") == "02"  %}
+        <input type="hidden" name="mes" value="febrero">
+    {% elif hoy.strftime("%m") == "03"  %}
+        <input type="hidden" name="mes" value="marzo">
+    {% elif hoy.strftime("%m") == "04"  %}
+    <input type="hidden" name="mes" value="abril">
+    {% elif hoy.strftime("%m") == "05"  %}
+    <input type="hidden" name="mes" value="mayo">
+    {% elif hoy.strftime("%m") == "06"  %}
+    <input type="hidden" name="mes" value="junio">
+    {% elif hoy.strftime("%m") == "07"  %}
+    <input type="hidden" name="mes" value="julio">
+    {% elif hoy.strftime("%m") == "08"  %}
+    <input type="hidden" name="mes" value="agosto">
+    {% elif hoy.strftime("%m") == "09"  %}
+    <input type="hidden" name="mes" value="septiembre">
+    {% elif hoy.strftime("%m") == "10"  %}
+    <input type="hidden" name="mes" value="octubre">
+    {% elif hoy.strftime("%m") == "11"  %}
+    <input type="hidden" name="mes" value="noviembre">
+    {% elif hoy.strftime("%m") == "12"  %}
+        <input type="hidden" name="mes" value="diciembre">
+    {% endif %}
+
+
+    GASTOS ELECTRICIDAD: <input type="number" name="gasto_electricidad" value="">KV/H<br>
+    GASTOS GASOLINA: <input type="number" name="gasto_gasolina" value=""> SEMANA<br>
+    GASTOS SEGURO: <input type="number" name="gasto_seguro" value=""> CADA AÑO<br>
+    <!-- GASTOS ITV: <input type="number" name="gasto_itv" value=""> CADA<br> -->
+{#<select name="mes">#}
+{#    <option value="Enero">Enero</option>#}
+{#    <option value="Febrero" selected>Febrero</option>#}
+{#    <option value="Marzo">Marzo</option>#}
+{#    <option value="Abril">Abril</option>#}
+{#    <option value="Mayo">Mayo</option>#}
+{#    <option value="Junio">Junio</option>#}
+{#    <option value="Julio">Julio</option>#}
+{#    <option value="Agosto">Agosto</option>#}
+{#    <option value="Septiembre">Septiembre</option>#}
+{#    <option value="Octubre">Octubre</option>#}
+{#    <option value="Noviembre">Noviembre</option>#}
+{#    <option value="Diciembre">Diciembre</option>#}
+{#    #}
+{##}
+{#</select>#}
+    <br>
+    <button type="submit">ENVIAR</button>
+
+
+</form>
+
+{% if historico %}
+    {% for i in range(0, historico|length) %}
+        MES {{ historico[i].mes }}<br>
+        CALCULO GASTO ELECTRICIDAD MES: {{ historico[i].calculo_gasto_electricidad_mes }} euros<br>
+        CALCULO GASTO GASOLINA MES: {{ historico[i].calculo_gasto_gasolina_mes }} euros<br>
+        CALCULO GASTO SEGURO MES: {{ historico[i].calculo_gasto_seguro_mes }} euros<br>
+        <hr>
+<br>
+    {% endfor %}
+{% endif %}
+
+
+</div>
+{% endblock %}

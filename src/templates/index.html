@@ -1,18 +1,21 @@
 {% extends "base.html" %}
 
-{% block content}
+{% block content %}
 <div class="">
-
-    <H1>USUARIO DE PRUEBA: h@h.com password: 123</H1>
-
-    <form action="{{ url_for("recibir_login") }}">
+    <H2>BIENVENDIO A LA CALCULADORA DE TU COCHE</H2>
+    <BR>
+    <H5>USUARIO DE PRUEBA: h@h.com password: 123</H5>
+<BR>
+    <form action="{{ url_for("recibir_login") }}" method="post">
         USUARIO: <input type="text" name="usuario" value=""><br>
         PASSWORD: <input type="text" name="password" value=""><br>
         <button type="submit">LOGIN</button>
     </form>
 
-
 </div>
+<br>
+<br>
+<a href="{{ url_for("registro")}}">Registrase</a>
 
 
 
