@@ -37,6 +37,7 @@ cursoradmin = db["admin"]
 # insert ejemplo
 cursoradmin.insert_one({"testing": "testing"})
 
+# --- solo pasa en el test ---
 
 @app.route("/")
 def home():
