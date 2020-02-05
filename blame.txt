@@ -1,0 +1,82 @@
+^5a39a20 (jose 2020-02-09 17:26:03 +0100  1) # con slim-buster suponemos que en la 3.8.X no habra muchos cambios
+^5a39a20 (jose 2020-02-09 17:26:03 +0100  2) FROM python:3.8-slim-buster
+^5a39a20 (jose 2020-02-09 17:26:03 +0100  3) 
+^5a39a20 (jose 2020-02-09 17:26:03 +0100  4) # la imagen alpine mas pequeña pero no tiene glib, empaqueta musl
+^5a39a20 (jose 2020-02-09 17:26:03 +0100  5) # https://wiki.musl-libc.org/functional-differences-from-glibc.html
+^5a39a20 (jose 2020-02-09 17:26:03 +0100  6) # FROM python:3.8.1-alpine3.11
+^5a39a20 (jose 2020-02-09 17:26:03 +0100  7) 
+^5a39a20 (jose 2020-02-09 17:26:03 +0100  8) 
+^5a39a20 (jose 2020-02-09 17:26:03 +0100  9) # copiamos lugar volatil requirements
+^5a39a20 (jose 2020-02-09 17:26:03 +0100 10) COPY requirements.txt /tmp/
+^5a39a20 (jose 2020-02-09 17:26:03 +0100 11) 
+^5a39a20 (jose 2020-02-09 17:26:03 +0100 12) RUN pip install --upgrade pip && \
+^5a39a20 (jose 2020-02-09 17:26:03 +0100 13)         pip install -r /tmp/requirements.txt
+^5a39a20 (jose 2020-02-09 17:26:03 +0100 14) 
+^5a39a20 (jose 2020-02-09 17:26:03 +0100 15) # copiamos el shell a bin para comprobar si
+^5a39a20 (jose 2020-02-09 17:26:03 +0100 16) # estmaos en entorno de desarrollo o produccion
+^5a39a20 (jose 2020-02-09 17:26:03 +0100 17) COPY /testing.sh /usr/local/bin/
+^5a39a20 (jose 2020-02-09 17:26:03 +0100 18) RUN chmod +x /usr/local/bin/testing.sh
+^5a39a20 (jose 2020-02-09 17:26:03 +0100 19) #&&\
+^5a39a20 (jose 2020-02-09 17:26:03 +0100 20) #ln -s /usr/local/bin/testing.sh /
+^5a39a20 (jose 2020-02-09 17:26:03 +0100 21) 
+^5a39a20 (jose 2020-02-09 17:26:03 +0100 22) # creamos usuario para no ser root
+^5a39a20 (jose 2020-02-09 17:26:03 +0100 23) # para alpine
+^5a39a20 (jose 2020-02-09 17:26:03 +0100 24) # # RUN adduser -D usuarioapp
+^5a39a20 (jose 2020-02-09 17:26:03 +0100 25) 
+^5a39a20 (jose 2020-02-09 17:26:03 +0100 26) # para slim-buster
+^5a39a20 (jose 2020-02-09 17:26:03 +0100 27) RUN useradd --create-home usuarioapp
+^5a39a20 (jose 2020-02-09 17:26:03 +0100 28) WORKDIR /home/usuarioapp
+^5a39a20 (jose 2020-02-09 17:26:03 +0100 29) 
+^5a39a20 (jose 2020-02-09 17:26:03 +0100 30) # creamos el arbol de directorios
+b42ee589 (jose 2020-02-04 21:01:31 +0100 31) # COPY /src /home/usuarioapp/src
+^5a39a20 (jose 2020-02-09 17:26:03 +0100 32) 
+^5a39a20 (jose 2020-02-09 17:26:03 +0100 33) # copiamos todo dentro de usuarioapp
+^5a39a20 (jose 2020-02-09 17:26:03 +0100 34) # estamos copiando los dockerfile y docker-compose, etc..
+^5a39a20 (jose 2020-02-09 17:26:03 +0100 35) # preguntar en el examen si lso dockerfile tienen que
+^5a39a20 (jose 2020-02-09 17:26:03 +0100 36) # en la imagen.
+^5a39a20 (jose 2020-02-09 17:26:03 +0100 37) COPY . /home/usuarioapp
+^5a39a20 (jose 2020-02-09 17:26:03 +0100 38) 
+^5a39a20 (jose 2020-02-09 17:26:03 +0100 39) USER usuarioapp
+^5a39a20 (jose 2020-02-09 17:26:03 +0100 40) 
+^5a39a20 (jose 2020-02-09 17:26:03 +0100 41) # cambiamos directorio a SRC
+^5a39a20 (jose 2020-02-09 17:26:03 +0100 42) WORKDIR /home/usuarioapp/src
+^5a39a20 (jose 2020-02-09 17:26:03 +0100 43) 
+^5a39a20 (jose 2020-02-09 17:26:03 +0100 44) # bin en PATH
+^5a39a20 (jose 2020-02-09 17:26:03 +0100 45) ENV PATH="/home/usuarioapp/.local/bin:${PATH}"
+^5a39a20 (jose 2020-02-09 17:26:03 +0100 46) 
+^5a39a20 (jose 2020-02-09 17:26:03 +0100 47) # por si acaso no esta en requirements. memorion 2 veces al dia XD
+^5a39a20 (jose 2020-02-09 17:26:03 +0100 48) RUN pip install gunicorn
+^5a39a20 (jose 2020-02-09 17:26:03 +0100 49) 
+^5a39a20 (jose 2020-02-09 17:26:03 +0100 50) # abierto puerto -- cambiar por otro puerto --
+^5a39a20 (jose 2020-02-09 17:26:03 +0100 51) EXPOSE 5000
+^5a39a20 (jose 2020-02-09 17:26:03 +0100 52) ENV PORT=5000
+^5a39a20 (jose 2020-02-09 17:26:03 +0100 53) 
+^5a39a20 (jose 2020-02-09 17:26:03 +0100 54) # argumentos y varibles de entorno para flask --  cambiar development/production . devolopment=hot reloads ----
+^5a39a20 (jose 2020-02-09 17:26:03 +0100 55) # BUILD.... docker build -t dados:latest -t dados:v1 . --build-arg FLASK_ENV="development"
+^5a39a20 (jose 2020-02-09 17:26:03 +0100 56) # RUN ..... docker run ........ -e "FLASK_ENV=production"
+^5a39a20 (jose 2020-02-09 17:26:03 +0100 57) ARG FLASK_ENV="development"
+^5a39a20 (jose 2020-02-09 17:26:03 +0100 58) ENV FLASK_ENV="${FLASK_ENV}" \
+^5a39a20 (jose 2020-02-09 17:26:03 +0100 59)         FLASK_DEBUG=1 \
+^5a39a20 (jose 2020-02-09 17:26:03 +0100 60)         FLASK_APP=main.py:app \
+^5a39a20 (jose 2020-02-09 17:26:03 +0100 61)         PYTHONDONTWRITEBYTECODE=1 \
+^5a39a20 (jose 2020-02-09 17:26:03 +0100 62)         PYTHONUNBUFFERED=1
+^5a39a20 (jose 2020-02-09 17:26:03 +0100 63) 
+^5a39a20 (jose 2020-02-09 17:26:03 +0100 64) # pequeño echo para saber si por defecto estamos en producion o development
+^5a39a20 (jose 2020-02-09 17:26:03 +0100 65) # RUN set -ex; \
+^5a39a20 (jose 2020-02-09 17:26:03 +0100 66) #     if [ "${FLASK_ENV}" = "development" ]; then \
+^5a39a20 (jose 2020-02-09 17:26:03 +0100 67) #         echo "FLASK_ENV POR DEFECTO: development"; \
+^5a39a20 (jose 2020-02-09 17:26:03 +0100 68) #     else \
+^5a39a20 (jose 2020-02-09 17:26:03 +0100 69) #         echo "FLASK_ENV POR DEFECTO: production"; \
+^5a39a20 (jose 2020-02-09 17:26:03 +0100 70) #     fi
+^5a39a20 (jose 2020-02-09 17:26:03 +0100 71) 
+^5a39a20 (jose 2020-02-09 17:26:03 +0100 72) ENTRYPOINT [ "/usr/local/bin/testing.sh" ]
+^5a39a20 (jose 2020-02-09 17:26:03 +0100 73) # si estamos en produccion, no aconsejan a flask como servidor.
+^5a39a20 (jose 2020-02-09 17:26:03 +0100 74) # aconsejan nginx + gunicorn
+^5a39a20 (jose 2020-02-09 17:26:03 +0100 75) CMD ["python", "main.py"]
+b7283771 (jose 2020-02-05 19:06:34 +0100 76) 
+b7283771 (jose 2020-02-05 19:06:34 +0100 77) 
+b7283771 (jose 2020-02-05 19:06:34 +0100 78) 
+b7283771 (jose 2020-02-05 19:06:34 +0100 79) # docker tag diadespues toniferra72/diadespues
+b7283771 (jose 2020-02-05 19:06:34 +0100 80) # docker push toniferra72/diadespues
+b7283771 (jose 2020-02-05 19:06:34 +0100 81) 
+b7283771 (jose 2020-02-05 19:06:34 +0100 82) 
