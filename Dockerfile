@@ -73,3 +73,10 @@ ENTRYPOINT [ "/usr/local/bin/testing.sh" ]
 # si estamos en produccion, no aconsejan a flask como servidor.
 # aconsejan nginx + gunicorn
 CMD ["python", "main.py"]
+
+
+
+# docker tag diadespues toniferra72/diadespues
+# docker push toniferra72/diadespues
+
+

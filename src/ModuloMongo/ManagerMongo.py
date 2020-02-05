@@ -114,7 +114,7 @@ class ManagerMongo:
 
 managermongo = ManagerMongo()
 managermongo.conectDB("pepito", "pepito", "cluster0-6oq5a.gcp.mongodb.net",
-                      db="jl_examen_docker", coleccion="coche")
+                    db="jl_examen_docker", coleccion="coche")
 #
 # managermongo.insertar_datos_calculo(
 #     "h@h.com", "enero", 100, 200, 300
