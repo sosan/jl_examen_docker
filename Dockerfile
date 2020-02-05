@@ -80,3 +80,9 @@ CMD ["python", "main.py"]
 # docker push toniferra72/diadespues
 
 
+# git push 
+# git fetch
+# git push
+# git branch
+
+
